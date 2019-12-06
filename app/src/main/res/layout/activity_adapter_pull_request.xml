@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/pull_nome_repositorio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/challenge_blue_card_title"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/repository_name" />
+
+    <TextView
+        android:id="@+id/pull_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/pull_nome_repositorio"
+        app:layout_constraintStart_toStartOf="@+id/pull_nome_repositorio"
+        app:layout_constraintTop_toBottomOf="@+id/pull_nome_repositorio"
+        tools:text="@string/mock_description" />
+
+    <ImageView
+        android:id="@+id/pull_contact_icon"
+        android:layout_width="54dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/icon_description"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/pull_description"
+        app:layout_constraintTop_toBottomOf="@+id/pull_description"
+        tools:src="@drawable/user" />
+
+    <TextView
+        android:id="@+id/pull_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/challenge_blue_card_title"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/pull_contact_icon"
+        app:layout_constraintTop_toTopOf="@+id/pull_contact_icon"
+        tools:text="name" />
+
+    <TextView
+        android:id="@+id/pull_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/pull_title"
+        app:layout_constraintTop_toBottomOf="@+id/pull_title"
+        tools:text="username" />
+
+    <TextView
+        android:id="@+id/pull_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        app:layout_constraintStart_toEndOf="@+id/pull_title"
+        app:layout_constraintTop_toTopOf="@+id/pull_title"
+        tools:text="--/--/--" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
