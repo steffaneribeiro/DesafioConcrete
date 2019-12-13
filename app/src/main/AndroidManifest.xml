@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.Activity_pull_request"></activity>
-        <activity android:name=".adapter.Adapter_Repositorio" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".ui.activity.Activity_pull_request"></activity>
+        <activity android:name=".ui.adapter.Adapter_Repositorio" />
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

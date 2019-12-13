@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".adapter.Adapter_Repositorio">
+    tools:context=".ui.adapter.Adapter_Repositorio">
 
     <TextView
         android:id="@+id/textView_nome_repositorio"

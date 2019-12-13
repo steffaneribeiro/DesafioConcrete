@@ -1,35 +1,38 @@
-package com.example.desafioconcrete.activity
+package com.example.desafioconcrete.ui.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.desafioconcrete.API.RepositorioService
-import com.example.desafioconcrete.adapter.Adapter_Repositorio
+import com.example.desafioconcrete.ui.adapter.Adapter_Repositorio
 import com.example.desafioconcrete.R
-import com.example.desafioconcrete.helper.RecyclerViewTouchListener
-import com.example.desafioconcrete.helper.RepositoriesConfig
+import com.example.desafioconcrete.listener.ScrollListener
+import com.example.desafioconcrete.retrofit.helper.RepositoriesConfig
 import com.example.desafioconcrete.model.Item
 import com.example.desafioconcrete.model.Resultado
+import com.example.desafioconcrete.ui.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_pull_request.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel by lazy{
+        ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+    }
+
     var repositorios :ArrayList<Item> = ArrayList()
-    lateinit var retrofit: Retrofit
 
     var layoutManager = LinearLayoutManager(this)
-    lateinit var adapter:Adapter_Repositorio
+    lateinit var adapter: Adapter_Repositorio
 
 
     // Variables for pagination
@@ -45,47 +48,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        progress_bar_circular.visibility = View.VISIBLE
-        retrofit = RepositoriesConfig().getRetrofit()
-        recuperarRepositorios()
+        setSwipeOnListener()
+        setObservable()
+        setAdapter()
+
+
+       /*
+        recuperarRepositorios()*/
+
+
     }
 
-    fun condigurarRecyclerView(){
+    /*fun condigurarRecyclerView(){
 
         recycle_repositorios.setHasFixedSize(true)
         recycle_repositorios.layoutManager = layoutManager
-
         recycle_repositorios.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-
-        recycle_repositorios!!.addOnItemTouchListener(
-            RecyclerViewTouchListener(
-                applicationContext,
-                recycle_repositorios!!,
-                object : RecyclerViewTouchListener.ClickListener {
-                    override fun onLongClick(view: View?, position: Int) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                    override fun onClick(view: View, position: Int) {
-
-                        var repositorio = repositorios.get(position)
-                        var idRepositorio = repositorio.id
-                        var full_name = repositorio.full_name
-                        var name = repositorio.name
-                        var login = repositorio.owner!!.login
-
-
-                        val intent = Intent(this@MainActivity, Activity_pull_request::class.java)
-                        intent.putExtra("IdRepositorio",idRepositorio)
-                        intent.putExtra("full_name" , full_name)
-                        intent.putExtra("name" , name)
-                        intent.putExtra("login" , login)
-                        startActivity(intent)
-
-                    }
-                })
-        )
-
         recycle_repositorios.addOnScrollListener(object : RecyclerView.OnScrollListener(){
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -117,31 +95,16 @@ class MainActivity : AppCompatActivity() {
     fun recuperarRepositorios(){
 
 
-        val youtubeService = retrofit.create(RepositorioService::class.java)
-        youtubeService.recuperarVideos(
-
-            q = "language:Java",sort = "stars", page = page_number
-
-        ).enqueue(object : Callback<Resultado> {
-            override fun onFailure(call: Call<Resultado>, t: Throwable) {
-
-                Log.d("resultado", "FALHOU")
-
-
-            }
-
+        val youtubeService = RepositoriesConfig().createRetrofit()
+        youtubeService.recuperarRepositorios(page = page_number).enqueue(object : Callback<Resultado> {
+            override fun onFailure(call: Call<Resultado>, t: Throwable) {}
             override fun onResponse(call: Call<Resultado>, response: Response<Resultado>) {
 
-                Log.d("resultado", response.toString())
-
-                var resultado = response.body()
+                val resultado = response.body()
                 repositorios = resultado?.items as ArrayList<Item>
                 recycle_repositorios.adapter = Adapter_Repositorio(this@MainActivity, repositorios)
                 progress_bar_circular.visibility = View.GONE
                 condigurarRecyclerView()
-               Toast.makeText(this@MainActivity,"First page is loaded",Toast.LENGTH_SHORT).show()
-
-
             }
 
         })
@@ -154,19 +117,11 @@ class MainActivity : AppCompatActivity() {
 
         isLoading = true
         progress_bar_circular.visibility = View.VISIBLE
-        val youtubeService = retrofit.create(RepositorioService::class.java)
-        youtubeService.recuperarVideos(
-
-            q = "language:Java",sort = "stars", page = page_number
+        val repositoryService = RepositoriesConfig().createRetrofit()
+        repositoryService.recuperarRepositorios( page = page_number
 
         ).enqueue(object : Callback<Resultado> {
-            override fun onFailure(call: Call<Resultado>, t: Throwable) {
-
-                Log.d("resultado", "FALHOU")
-
-
-            }
-
+            override fun onFailure(call: Call<Resultado>, t: Throwable) {}
             override fun onResponse(call: Call<Resultado>, response: Response<Resultado>) {
 
                 if(response.message() == "OK"){
@@ -180,7 +135,9 @@ class MainActivity : AppCompatActivity() {
                         repositorios.add(i)
 
                     }
-                    Adapter_Repositorio(this@MainActivity).addRepositorios(repositorios)
+                    Adapter_Repositorio(
+                        this@MainActivity
+                    ).addRepositorios(repositorios)
                     condigurarRecyclerView()
                     Toast.makeText(this@MainActivity,"Page $page_number is loaded...",Toast.LENGTH_SHORT).show()
 
@@ -194,6 +151,58 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+    }
+
+*/
+    private fun setSwipeOnListener() {
+        progress_bar_circular.visibility = View.VISIBLE
+        viewModel.initRequest( 1)
+
+
+
+    }
+
+    private fun setObservable() {
+
+        viewModel.getCollectionAll().observe(this, Observer {
+            progress_bar_circular.visibility = View.GONE
+            updateList(it)
+        })
+
+        viewModel.getLiveData().observe(this, Observer {
+            adapter.pessoaList!!.clear()
+            updateList(it)
+
+        })
+
+
+    }
+
+
+    private fun updateList(it: ArrayList<Item>?) {
+        it?.let {
+            adapter.pessoaList!!.addAll(it)
+            adapter.notifyDataSetChanged()
+            viewModel.getCollectionAll().value = null
+
+
+        }
+    }
+
+    private fun setAdapter() {
+        val adapter = Adapter_Repositorio(this, ArrayList())
+        var layoutManeger = LinearLayoutManager(this)
+        val recyclerViewvar = recycle_repositorios
+        recyclerViewvar.layoutManager = layoutManeger
+        recyclerViewvar.adapter = adapter
+        recycle_repositorios.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        recycle_repositorios.addOnScrollListener(ScrollListener(layoutManeger) {
+            progress_bar_circular.visibility = View.VISIBLE
+            viewModel.loadMore()
+
+        })
+
+        this.adapter = adapter
     }
 
 

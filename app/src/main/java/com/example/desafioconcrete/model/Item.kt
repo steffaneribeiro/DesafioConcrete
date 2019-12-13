@@ -1,5 +1,7 @@
 package com.example.desafioconcrete.model
 
+import java.io.Serializable
+
 class Item(
 
     var id: Int? = null,
@@ -10,4 +12,4 @@ class Item(
     var stargazers_count:Int = 0,
     var forks_count:Int = 0
 
-)
+): Serializable

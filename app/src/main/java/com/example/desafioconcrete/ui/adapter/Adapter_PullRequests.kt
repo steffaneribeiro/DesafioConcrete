@@ -1,6 +1,8 @@
-package com.example.desafioconcrete.adapter
+package com.example.desafioconcrete.ui.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,27 +12,35 @@ import com.example.desafioconcrete.model.PullRequest
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_adapter_pull_request.view.*
 
-class Adapter_PullRequests (private val context: Context, private var pessoaList: MutableList<PullRequest>):
+class Adapter_PullRequests (private val context: Context, var pessoaList: MutableList<PullRequest>):
 
 
 
-    RecyclerView.Adapter<Adapter_PullRequests.VideoViewHolder>() {
+    RecyclerView.Adapter<Adapter_PullRequests.PullRequestViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PullRequestViewHolder {
 
         val view = LayoutInflater.from(context).inflate(R.layout.activity_adapter_pull_request, parent, false)
-        return VideoViewHolder(view)
+        return PullRequestViewHolder(view)
     }
 
     override fun getItemCount() = pessoaList.size
 
-    override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PullRequestViewHolder, position: Int) {
         holder.bindView(pessoaList[position])
+
+        holder.itemView.setOnClickListener{
+            var pull = pessoaList.get(position)
+
+            val openURL = Intent(Intent.ACTION_VIEW)
+            openURL.data = Uri.parse(pull.html_url)
+            context.startActivity(openURL)
+        }
         
     }
 
-    class VideoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class PullRequestViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val pull_nome_repositorio = itemView.pull_nome_repositorio
         val pull_description = itemView.pull_description
         val pull_contact_icon = itemView.pull_contact_icon
