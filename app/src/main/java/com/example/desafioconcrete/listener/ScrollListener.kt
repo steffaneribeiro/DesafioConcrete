@@ -1,6 +1,5 @@
 package com.example.desafioconcrete.listener
 
-import android.widget.AbsListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -9,36 +8,29 @@ class ScrollListener(
     val loadMore: () -> Unit
 ) : RecyclerView.OnScrollListener() {
 
-    var isScrolling = false
-    private var currentItems: Int = 0
-    private var totalItems: Int = 0
-    private var scrollOutItems: Int = 0
-
-
-    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-
-        if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            isScrolling = true
-
-        }
-        super.onScrollStateChanged(recyclerView, newState)
-    }
+    var isLoading = false
+    var pastVisibleItems = 0; var visibleItemCount = 0; var totalItemCount = 0; var previous_total = 0
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
+        if (dy > 0) {
+            visibleItemCount = layoutManager.childCount
+            totalItemCount = layoutManager.itemCount
+            pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
 
-        currentItems = layoutManager.childCount
-        totalItems = layoutManager.itemCount
-        scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+            if (isLoading) {
+                if (totalItemCount > previous_total) {
 
+                    pastVisibleItems = totalItemCount
+                }
+            }
+            if (!isLoading && (visibleItemCount+pastVisibleItems)>=totalItemCount && pastVisibleItems >=0) {
+                isLoading = false
+                loadMore()
 
-        if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
-            //data fetch
-            isScrolling = false
-            loadMore()
+            }
         }
         super.onScrolled(recyclerView, dx, dy)
     }
-
-
 }
+

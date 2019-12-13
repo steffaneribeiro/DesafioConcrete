@@ -4,7 +4,7 @@ import com.example.desafioconcrete.retrofit.service.RepositorioService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RepositoriesConfig{
+class RepositoriesConfig {
     private val retrofit = Retrofit.Builder().baseUrl("https://api.github.com/search/")
             .addConverterFactory(GsonConverterFactory.create()).build()
 

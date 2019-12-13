@@ -14,10 +14,7 @@ import kotlinx.android.synthetic.main.activity_adapter_pull_request.view.*
 
 class Adapter_PullRequests (private val context: Context, var pessoaList: MutableList<PullRequest>):
 
-
-
     RecyclerView.Adapter<Adapter_PullRequests.PullRequestViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PullRequestViewHolder {
 
@@ -37,7 +34,6 @@ class Adapter_PullRequests (private val context: Context, var pessoaList: Mutabl
             openURL.data = Uri.parse(pull.html_url)
             context.startActivity(openURL)
         }
-        
     }
 
     class PullRequestViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -48,8 +44,6 @@ class Adapter_PullRequests (private val context: Context, var pessoaList: Mutabl
         val pull_user_name = itemView.pull_user_name
         val pull_date = itemView.pull_date
 
-
-
         fun bindView(pessoa: PullRequest) {
             pull_nome_repositorio.text = pessoa.title
             pull_description.text = pessoa.body
@@ -58,8 +52,5 @@ class Adapter_PullRequests (private val context: Context, var pessoaList: Mutabl
             Picasso.get().load(pessoa.user.avatar_url).into(pull_contact_icon)
 
         }
-
-
     }
-
 }

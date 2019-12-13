@@ -13,7 +13,7 @@ import com.example.desafioconcrete.ui.activity.Activity_pull_request
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_adapter__repositorio.view.*
 
-class Adapter_Repositorio(private val context: Context, var pessoaList: MutableList<Item>? = null):
+class Adapter_Repositorio(private val context: Context, var pessoaList: MutableList<Item>):
 
     RecyclerView.Adapter<Adapter_Repositorio.RepositorioViewHolder>() {
 
@@ -23,13 +23,13 @@ class Adapter_Repositorio(private val context: Context, var pessoaList: MutableL
         return RepositorioViewHolder(view)
     }
 
-    override fun getItemCount() = pessoaList!!.size
+    override fun getItemCount() = pessoaList.size
 
     override fun onBindViewHolder(holder: RepositorioViewHolder, position: Int) {
-        pessoaList?.get(position)?.let { holder.bindView(it) }
+        pessoaList.get(position)?.let { holder.bindView(it) }
 
         holder.itemView.setOnClickListener{
-            var repositorio = pessoaList?.get(position)
+            val repositorio = pessoaList.get(position)
             val intent = Intent(context, Activity_pull_request::class.java)
             val extras = Bundle()
             extras.putSerializable("repositorio",repositorio)
@@ -45,9 +45,6 @@ class Adapter_Repositorio(private val context: Context, var pessoaList: MutableL
         val textView_stars = itemView.textView_stars
         val textView_forks = itemView.textView_forks
         val textView_user_name = itemView.textView_user_name
-        val textView_nome_sobrenome = itemView.textView_nome_sobrenome
-
-
 
         fun bindView(pessoa: Item) {
             textView_nome_repositorio.text = pessoa.name
@@ -56,7 +53,6 @@ class Adapter_Repositorio(private val context: Context, var pessoaList: MutableL
             textView_forks.text = pessoa.forks_count.toString()
             textView_user_name.text = pessoa.owner?.login
             Picasso.get().load(pessoa.owner?.avatar_url).into(imageView_User)
-
         }
     }
 }
